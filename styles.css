@@ -1,0 +1,390 @@
+/* Estilos gerais aplicados ao corpo da página */
+body {
+    font-family: Arial, sans-serif; /* Define a fonte padrão como Arial ou sans-serif */
+    margin: 0; /* Remove margens padrão */
+    padding: 0; /* Remove preenchimento padrão */
+    background-color: #f4f4f4; /* Define o fundo cinza claro */
+    color: #333; /* Define a cor do texto como cinza escuro */
+    min-height: 100vh; /* Garante que o corpo da página tenha pelo menos a altura da janela de visualização */
+    display: flex; /* Usa flexbox para organizar o layout */
+    flex-direction: column; /* Alinha os elementos em coluna */
+}
+
+/* Estilos do cabeçalho, usado em todas as páginas */
+header {
+    background-color: #007bff; /* Fundo azul primário */
+    color: white; /* Texto branco */
+    text-align: center; /* Centraliza o texto */
+    padding: 1.5rem; /* Adiciona preenchimento interno */
+}
+
+header h1 {
+    font-size: 2.5rem; /* Tamanho da fonte do título */
+    margin: 0; /* Remove margens padrão */
+}
+
+/* Estilos da navegação padrão para outras páginas (sem Bootstrap) */
+nav {
+    background-color: #333; /* Fundo cinza escuro */
+    padding: 1rem; /* Preenchimento interno */
+    display: flex; /* Usa flexbox para alinhamento */
+    justify-content: center; /* Centraliza os itens */
+    overflow-x: auto; /* Permite rolagem horizontal em telas pequenas */
+    white-space: nowrap; /* Impede quebra de linha nos links */
+}
+
+nav a {
+    color: white; /* Texto branco */
+    text-decoration: none; /* Remove sublinhado dos links */
+    margin: 0 15px; /* Margem horizontal entre os links */
+    font-weight: bold; /* Texto em negrito */
+    white-space: nowrap; /* Impede quebra de linha */
+}
+
+nav a:hover {
+    color: #007bff; /* Cor azul ao passar o mouse */
+}
+
+/* Estilos da navegação específica para a página inicial (com Bootstrap) */
+body.home-page nav.navbar {
+    background-color: #333; /* Fundo cinza escuro para a navbar da página inicial */
+}
+
+body.home-page nav .nav-link {
+    color: white; /* Texto branco */
+    font-weight: bold; /* Texto em negrito */
+    margin: 0 15px; /* Margem horizontal entre os links */
+}
+
+body.home-page nav .nav-link:hover {
+    color: #007bff; /* Cor azul ao passar o mouse */
+}
+
+/* Estilos da seção principal (hero) apenas para a página inicial */
+body.home-page .hero-section {
+    background-image: url('imagem1.jpg'); /* Imagem de fundo (substitua pelo caminho real) */
+    background-size: cover; /* Cobre toda a área */
+    background-position: center; /* Centraliza a imagem */
+    height: 400px; /* Altura fixa */
+    display: flex; /* Usa flexbox para alinhamento */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    border-radius: 10px; /* Bordas arredondadas */
+    margin-bottom: 2rem; /* Margem inferior para espaçamento */
+}
+
+/* Estilo do título dentro da seção hero */
+body.home-page .hero-section h1 {
+    color: white; /* Texto branco */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra no texto para legibilidade */
+    font-size: 2rem; /* Tamanho da fonte */
+    text-align: center; /* Centraliza o texto */
+    padding: 1rem; /* Preenchimento interno */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semitransparente */
+    border-radius: 8px; /* Bordas arredondadas */
+}
+
+/* Estilos do contêiner padrão para outras páginas */
+.container {
+    max-width: 1200px; /* Largura máxima */
+    margin: 20px auto; /* Centraliza com margens verticais */
+    padding: 20px; /* Preenchimento interno */
+    padding-bottom: 60px; /* Espaço extra na parte inferior para o rodapé fixo */
+}
+
+/* Estilos do contêiner específico para a página inicial */
+body.home-page .container {
+    max-width: 800px; /* Largura máxima reduzida */
+    margin: 2rem auto; /* Centraliza com margens maiores */
+    padding: 2rem; /* Preenchimento interno */
+    background-color: white; /* Fundo branco */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilo do título h2 dentro do contêiner na página inicial */
+body.home-page .container h2 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra no texto */
+    background-color: #666; /* Fundo cinza escuro */
+    padding: 1rem; /* Preenchimento interno */
+    border-radius: 8px; /* Bordas arredondadas */
+    color: white; /* Texto branco */
+}
+
+/* Estilos do rodapé, usado em todas as páginas */
+.footer {
+    background-color: #333; /* Fundo cinza escuro */
+    color: white; /* Texto branco */
+    text-align: center; /* Centraliza o texto */
+    padding: 1rem; /* Preenchimento interno */
+    position: fixed; /* Fixa o rodapé na parte inferior */
+    bottom: 0; /* Alinha ao fundo da página */
+    width: 100%; /* Largura total */
+    z-index: 1; /* Garante que fique acima de outros elementos */
+}
+
+/* Estilos do rodapé específico para a página inicial */
+body.home-page .footer {
+    background-color: #000; /* Fundo preto para a página inicial */
+    position: static; /* Remove a posição fixa para que o rodapé fique no fluxo normal do documento */
+    margin-top: auto; /* Empurra o rodapé para o final da página usando flexbox */
+}
+
+/* Estilos para formulários */
+.input-group {
+    display: flex; /* Usa flexbox para alinhamento */
+    flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+    gap: 10px; /* Espaçamento entre elementos */
+    margin-bottom: 15px; /* Margem inferior */
+}
+
+.input-group label {
+    flex: 1 1 100px; /* Largura mínima de 100px */
+    font-weight: bold; /* Texto em negrito */
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    flex: 2 1 200px; /* Largura mínima de 200px */
+    padding: 8px; /* Preenchimento interno */
+    border: 1px solid #ccc; /* Borda cinza clara */
+    border-radius: 4px; /* Bordas arredondadas */
+}
+
+.input-group button {
+    padding: 10px 20px; /* Preenchimento interno */
+    background-color: #007bff; /* Fundo azul */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de clique */
+}
+
+.input-group button:hover {
+    background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
+}
+
+/* Estilos específicos para botões de videochamada */
+#startVideoCall,
+#stopVideoCall,
+#startVideoCallExtra,
+#stopVideoCallExtra {
+    padding: 10px 20px; /* Preenchimento interno */
+    background-color: #dc3545; /* Fundo vermelho */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de clique */
+    margin: 5px; /* Margem externa */
+}
+
+#startVideoCall:hover,
+#stopVideoCall:hover,
+#startVideoCallExtra:hover,
+#stopVideoCallExtra:hover {
+    background-color: #c82333; /* Vermelho mais escuro ao passar o mouse */
+}
+
+/* Estilos para tabelas */
+table {
+    width: 100%; /* Largura total */
+    border-collapse: collapse; /* Remove espaçamento entre bordas */
+    margin-bottom: 20px; /* Margem inferior */
+}
+
+table th,
+table td {
+    padding: 10px; /* Preenchimento interno */
+    border: 1px solid #ddd; /* Borda cinza clara */
+    text-align: left; /* Alinhamento à esquerda */
+}
+
+table th {
+    background-color: #007bff; /* Fundo azul para cabeçalhos */
+    color: white; /* Texto branco */
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Fundo cinza claro para linhas pares */
+}
+
+/* Estilos para botões de exclusão */
+.excluir {
+    background-color: #dc3545; /* Fundo vermelho */
+    color: white; /* Texto branco */
+    border: none; /* Sem borda */
+    padding: 5px 10px; /* Preenchimento interno */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de clique */
+}
+
+.excluir:hover {
+    background-color: #c82333; /* Vermelho mais escuro ao passar o mouse */
+}
+
+/* Estilos para seções específicas */
+.management-section,
+.auth-section,
+.access-control-section,
+.lgpd-section,
+.audit-section {
+    background-color: white; /* Fundo branco */
+    padding: 20px; /* Preenchimento interno */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin-bottom: 20px; /* Margem inferior */
+}
+
+.info-group p {
+    margin: 5px 0; /* Margem vertical */
+}
+
+.button-group {
+    display: flex; /* Usa flexbox para alinhamento */
+    gap: 10px; /* Espaçamento entre botões */
+}
+
+.lgpd-button {
+    padding: 10px 20px; /* Preenchimento interno */
+    border: none; /* Sem borda */
+    border-radius: 4px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de clique */
+}
+
+.anonimizar {
+    background-color: #28a745; /* Fundo verde */
+    color: white; /* Texto branco */
+}
+
+.anonimizar:hover {
+    background-color: #218838; /* Verde mais escuro ao passar o mouse */
+}
+
+.excluir {
+    background-color: #dc3545; /* Fundo vermelho */
+    color: white; /* Texto branco */
+}
+
+.excluir:hover {
+    background-color: #c82333; /* Vermelho mais escuro ao passar o mouse */
+}
+
+/* Estilização de logs de auditoria */
+#logAuditoria p {
+    margin: 5px 0; /* Margem vertical */
+    padding: 5px; /* Preenchimento interno */
+    background-color: #f8f9fa; /* Fundo cinza claro */
+    border-left: 4px solid #007bff; /* Borda esquerda azul */
+}
+
+/* Estilo para notificações */
+.modal-notificacao {
+    position: fixed; /* Posição fixa na tela */
+    top: 20px; /* Distância do topo */
+    right: 20px; /* Distância da direita */
+    background-color: #4CAF50; /* Fundo verde */
+    color: white; /* Texto branco */
+    padding: 15px 20px; /* Preenchimento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    z-index: 1000; /* Fica acima de outros elementos */
+    display: none; /* Inicialmente oculto */
+    opacity: 0; /* Inicialmente transparente */
+    font-size: 16px; /* Tamanho da fonte */
+    min-width: 200px; /* Largura mínima */
+    text-align: center; /* Texto centralizado */
+    animation: slideIn 0.5s ease-in-out forwards; /* Animação de entrada */
+}
+
+/* Animação de entrada para notificações */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%); /* Começa fora da tela à direita */
+        opacity: 0; /* Totalmente transparente */
+    }
+    to {
+        transform: translateX(0); /* Move para a posição final */
+        opacity: 1; /* Totalmente visível */
+    }
+}
+
+/* Animação de saída para notificações */
+@keyframes slideOut {
+    from {
+        transform: translateX(0); /* Começa na posição visível */
+        opacity: 1; /* Totalmente visível */
+    }
+    to {
+        transform: translateX(100%); /* Move para fora da tela à direita */
+        opacity: 0; /* Totalmente transparente */
+    }
+}
+
+/* Regras de responsividade para telas até 768px */
+@media (max-width: 768px) {
+    nav {
+        justify-content: flex-start; /* Alinha à esquerda em telas menores */
+        padding: 10px 0; /* Ajusta o preenchimento */
+    }
+
+    .input-group label,
+    .input-group input,
+    .input-group select,
+    .input-group textarea {
+        flex: 1 1 100%; /* Ocupa largura total */
+        width: 100%; /* Força largura total */
+    }
+
+    table {
+        display: block; /* Permite rolagem em tabelas */
+        overflow-x: auto; /* Rolagem horizontal */
+        white-space: nowrap; /* Impede quebra de linha */
+    }
+
+    .management-section,
+    .auth-section,
+    .access-control-section,
+    .lgpd-section,
+    .audit-section {
+        padding: 15px; /* Reduz o preenchimento */
+    }
+
+    #videoContainer video {
+        width: 100%; /* Largura total */
+        max-width: 300px; /* Largura máxima */
+        margin: 10px 0; /* Margem vertical */
+    }
+}
+
+/* Regras de responsividade para telas até 480px */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em; /* Reduz o tamanho da fonte */
+    }
+
+    .container {
+        padding: 10px; /* Reduz o preenchimento */
+    }
+
+    .input-group button {
+        width: 100%; /* Botões ocupam largura total */
+    }
+
+    .modal-notificacao {
+        top: 10px; /* Ajusta a posição */
+        right: 10px; /* Ajusta a posição */
+        left: 10px; /* Ajusta a posição */
+        font-size: 0.9em; /* Reduz o tamanho da fonte */
+    }
+}
+
+/* Estilo para botão de cancelar anonimização */
+.lgpd-button.cancelar-anonimizacao {
+    background-color: #6c757d; /* Fundo cinza */
+    color: white; /* Texto branco */
+}
+
+.lgpd-button.cancelar-anonimizacao:hover {
+    background-color: #5a6268; /* Cinza mais escuro ao passar o mouse */
+}
