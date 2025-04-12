@@ -1,25 +1,32 @@
+// ✅ Configuração inicial e funções utilitárias
+
+// URL base da API
+const API_URL = 'https://projeto-vidaplus-production.up.railway.app';
+console.log('🔗 Usando API URL:', API_URL);
 console.log('✅ Script carregado: utilizando decodificação manual de JWT');
 
 // Remove todos os caracteres não numéricos de um CPF
 function limparCPF(cpf) {
     return cpf.replace(/\D/g, '');
 }
+
 // Função para decodificar o token JWT manualmente
 function decodeJWT(token) {
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+        const jsonPayload = decodeURIComponent(
+            atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join('')
+        );
         return JSON.parse(jsonPayload);
     } catch (e) {
         throw new Error('Erro ao decodificar o token: ' + e.message);
     }
 }
 
-// URL base da API
-const API_URL = 'https://projeto-vidaplus-production.up.railway.app';
+// Retorna os dados do usuário logado a partir do localStorage
 function getUsuarioLogado() {
     const usuario = localStorage.getItem('usuarioLogado');
     return usuario ? JSON.parse(usuario) : null;
