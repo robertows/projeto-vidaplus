@@ -43,9 +43,10 @@ app.get('/', (req, res) => {
 });
 
 // ===== INICIALIZAÇÃO DO SERVIDOR =====
-const PORT = 3000; // Porta padrão do servidor
+const PORT = process.env.PORT || 3000; // Usa a porta do Railway ou a 3000 localmente
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
 
 
