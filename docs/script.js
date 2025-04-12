@@ -1239,56 +1239,64 @@ function inicializarEventos() {
         });
     }
 
-    const formPaciente = document.getElementById('formPaciente');
-    if (formPaciente) {
-        formPaciente.addEventListener('submit', async (e) => {
-            e.preventDefault();
-    
-            const nome = document.getElementById('nome')?.value.trim();
-            const cpf = formatarCPF(document.getElementById('cpf')?.value.trim());
-            const dataNascimento = document.getElementById('dataNascimento')?.value;
-            let telefone = document.getElementById('telefone')?.value.trim();
-            const endereco = document.getElementById('endereco')?.value.trim();
-    
-            if (!nome || !cpf || !dataNascimento || !telefone || !endereco) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-    
-            const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
-            if (padraoSQL.test(nome)) {
-                alert('Nome inválido: contém comandos não permitidos.');
-                return;
-            }
-    
-            try {
-                telefone = formatarTelefone(telefone);
-    
-                const response = await makeAuthenticatedRequest('/pacientes', 'POST', {
-                    nome,
-                    cpf,
-                    data_nascimento: dataNascimento,
-                    telefone,
-                    endereco
-                });
-    
-                if (!response.ok) {
-                    const erro = await response.json();
-                    alert(erro.error || 'Erro desconhecido ao cadastrar paciente.');
-                    return;
-                }
-    
-                await registrarAuditoria(`Paciente ${nome} adicionado`);
-                await carregarPacientes();
-                formPaciente.reset();
-                alert('Paciente cadastrado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao cadastrar paciente:', error);
-                alert('Erro ao cadastrar paciente: ' + error.message);
-            }
-        });
-    }
-    
+// Seleciona o formulário de cadastro de paciente
+const formPaciente = document.getElementById('formPaciente');
+
+if (formPaciente) {
+    formPaciente.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Evita que o formulário recarregue a página
+
+        // Captura e trata os valores dos campos
+        const nome = document.getElementById('nome')?.value.trim();
+        const cpf = formatarCPF(document.getElementById('cpf')?.value.trim());
+        const dataNascimento = document.getElementById('dataNascimento')?.value;
+        let telefone = document.getElementById('telefone')?.value.trim();
+        const endereco = document.getElementById('endereco')?.value.trim();
+
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        if (!nome || !cpf || !dataNascimento || !telefone || !endereco) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        // Expressão regular simples para evitar comandos perigosos no campo nome
+        const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
+        if (padraoSQL.test(nome)) {
+            alert('Nome inválido: contém comandos não permitidos.');
+            return;
+        }
+
+        try {
+            // Formata o telefone para o padrão (XX) XXXXX-XXXX
+            telefone = formatarTelefone(telefone);
+
+            // Envia os dados para a API
+            await makeAuthenticatedRequest('/pacientes', 'POST', {
+                nome,
+                cpf,
+                data_nascimento: dataNascimento,
+                telefone,
+                endereco
+            });
+
+            // Registra a ação na auditoria
+            await registrarAuditoria(`Paciente ${nome} adicionado`);
+
+            // Recarrega a tabela de pacientes após o cadastro
+            await carregarPacientes();
+
+            // Limpa o formulário
+            formPaciente.reset();
+
+            // Exibe mensagem de sucesso
+            alert('Paciente cadastrado com sucesso!');
+        } catch (error) {
+            // Trata erros durante o processo de cadastro
+            console.error('Erro ao cadastrar paciente:', error);
+            alert('Erro ao cadastrar paciente: ' + error.message);
+        }
+    });
+}    
     // Cadastro de profissional
     const formProfissional = document.getElementById('formProfissional');
     if (formProfissional) {
