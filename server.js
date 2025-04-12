@@ -34,7 +34,7 @@ app.use('/leitos', leitosRoutes);
 app.use('/suprimentos', suprimentosRoutes);
 app.use('/historico_financeiro', historicoFinanceiroRoutes);
 app.use('/usuarios', usuariosRoutes); // 🔁 Evite duplicar esta linha
-app.use(authRoutes); // Login
+app.use('/auth', authRoutes); // Login
 
 // ===== ROTA PADRÃO =====
 // Rota raiz para verificação se o servidor está rodando
