@@ -20,7 +20,6 @@ function decodeJWT(token) {
 
 // URL base da API
 const API_URL = 'https://projeto-vidaplus-production.up.railway.app';
-
 function getUsuarioLogado() {
     const usuario = localStorage.getItem('usuarioLogado');
     return usuario ? JSON.parse(usuario) : null;
