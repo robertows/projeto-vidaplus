@@ -1,18 +1,25 @@
 const mysql = require('mysql2/promise'); 
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+require('dotenv').config();
 
-// Criação do pool de conexões com o banco de dados
-// O pool permite reutilizar conexões abertas, melhorando a performance da aplicação
-const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',         // Endereço do servidor MySQL
-    user: process.env.DB_USER || 'root',              // Usuário do banco de dados
-    password: process.env.DB_PASSWORD || '',          // Senha do banco de dados
-    database: process.env.DB_NAME || 'vidaplus_db',   // Nome do banco de dados
-    waitForConnections: true,                         // Aguarda conexões se o limite for atingido
-    connectionLimit: 10,                              // Número máximo de conexões simultâneas
-    queueLimit: 0                                     // Número máximo de conexões na fila (0 = ilimitado)
+// Debug opcional para ver os dados carregados do .env
+console.log('🔌 Conectando com DB:', {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT
 });
 
-// Exporta o pool para ser usado em outras partes da aplicação (ex: rotas e controladores)
+const pool = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'vidaplus_db',
+    port: Number(process.env.DB_PORT) || 3306, // 👈 conversão obrigatória
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
 module.exports = pool;
+
 
