@@ -39,8 +39,8 @@ https://projeto-vidaplus-production.up.railway.app/pacientes.html
 
 🔐 Credenciais de Acesso para Testes:
 
-Perfil	Usuário	     Senha
-Admin	admin	    senha123
+Perfil	Usuário	Senha
+Admin	admin	senha123
 
 ## 🛠️ Tecnologias Utilizadas
 
