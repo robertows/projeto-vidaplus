@@ -20,7 +20,7 @@ Foi desenvolvido para fins educacionais e simula a rotina de um hospital moderno
 - ✅ Cadastro de pacientes com CPF validado
 - ✅ Anonimização e exclusão do CPF (conforme LGPD)
 - ✅ Registro de auditoria para ações sensíveis e tentativas maliciosas
-- ✅ Agendamento de consultas presenciais
+- ✅ Agendamento de consultas presenciais e online
 - ✅ Atendimento por **telemedicina** com registro de vídeo e prescrição online
 - ✅ Prescrições médicas presenciais e online
 - ✅ Agendamento e resultados de exames
@@ -31,6 +31,16 @@ Foi desenvolvido para fins educacionais e simula a rotina de um hospital moderno
 - ✅ Painel de auditoria com filtros por usuário, data e ação
 
 ---
+🌐 Acesso ao Sistema
+
+🔗 Sistema online:
+
+https://projeto-vidaplus-production.up.railway.app/pacientes.html
+
+🔐 Credenciais de Acesso para Testes:
+
+Perfil	Usuário	     Senha
+Admin	admin123	admin123
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -48,10 +58,9 @@ Foi desenvolvido para fins educacionais e simula a rotina de um hospital moderno
 - LocalStorage com token JWT
 
 **Hospedagem:**
-- Railway (API Back-end)
-- GitHub Pages ou Vercel (Front-end – opcional)
-
----
+- Railway (Back-end e Front-end integrados)
+- GitHub (código-fonte completo)
+--
 
 ## 🧑‍💻 Como executar localmente
 
