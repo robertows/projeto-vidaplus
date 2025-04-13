@@ -1,3 +1,6 @@
+// Autor: RU:4334534 ROBERTO CARVALHO
+
+// Importa o módulo mysql2/promise para trabalhar com MySQL de forma assíncrona
 const mysql = require('mysql2/promise'); 
 
 // Carrega as variáveis de ambiente do arquivo .env
@@ -23,11 +26,8 @@ const pool = mysql.createPool({
     database: process.env.DB_NAME || 'vidaplus_db',
     // Porta do banco de dados, converte a variável de ambiente para número ou usa 3306 como padrão
     port: Number(process.env.DB_PORT) || 3306, // 👈 conversão obrigatória
-    // Aguarda por conexões disponíveis no pool
     waitForConnections: true,
-    // Define o limite máximo de 10 conexões simultâneas
     connectionLimit: 10,
-    // Define que não há limite para a fila de espera de conexões
     queueLimit: 0
 });
 
