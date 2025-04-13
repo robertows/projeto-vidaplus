@@ -1,6 +1,7 @@
 // Autor: RU:4334534 ROBERTO CARVALHO
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // 🔧 Necessário para servir arquivos estáticos
 const app = express();
 
 // ===== MIDDLEWARES GLOBAIS =====
@@ -8,6 +9,10 @@ const app = express();
 app.use(cors());
 // Permite que a aplicação entenda JSON no corpo das requisições
 app.use(express.json());
+
+// ===== SERVE OS ARQUIVOS HTML DO FRONT-END =====
+// Define a pasta 'docs' como pública para servir arquivos HTML, CSS e JS do front-end
+app.use(express.static(path.join(__dirname, 'docs')));
 
 // ===== IMPORTAÇÃO DAS ROTAS =====
 const pacientesRoutes = require('./routes/pacientesRoutes');             // Rota para pacientes (CRUD, LGPD)
@@ -38,9 +43,9 @@ app.use('/usuarios', usuariosRoutes); // 🔁 Evite duplicar esta linha
 app.use('/auth', authRoutes); // Login
 
 // ===== ROTA PADRÃO =====
-// Rota raiz para verificação se o servidor está rodando
+// Serve o arquivo index.html quando acessar a raiz da aplicação (/) via navegador
 app.get('/', (req, res) => {
-  res.send('✅ Servidor VidaPlus2 rodando com sucesso!');
+  res.sendFile(path.join(__dirname, 'docs', 'index.html'));
 });
 
 // ===== INICIALIZAÇÃO DO SERVIDOR =====
@@ -48,3 +53,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
+
