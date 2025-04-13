@@ -1,14 +1,48 @@
+// Autor: RU:4334534 ROBERTO CARVALHO
 const express = require('express');
 const router = express.Router();
 const verificarAutenticacao = require('../middlewares/authMiddleware');
 const db = require('../db');
 
-// ROTA POST - Cadastrar profissional
+// ROTA POST - Cadastrar profissional com proteção contra injeção SQL
 router.post('/', verificarAutenticacao(['admin', 'atendente']), async (req, res) => {
   const { nome, categoria, especialidade, crm, telefone, email } = req.body;
 
   if (!nome || !categoria || !telefone || !email) {
     return res.status(400).json({ error: 'Campos obrigatórios: nome, categoria, telefone e email.' });
+  }
+
+  // Expressão regular para detectar padrões comuns de injeção SQL
+  const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
+  if (padraoSQL.test(nome)) {
+    try {
+      await db.query(
+        'INSERT INTO auditoria (usuario, acao, data) VALUES (?, ?, NOW())',
+        ['sistema', `Tentativa de injeção SQL no nome do profissional: "${nome}"`]
+      );
+      console.warn('🚨 Tentativa de injeção SQL registrada na auditoria.');
+    } catch (auditErr) {
+      console.error('Erro ao registrar tentativa maliciosa na auditoria:', auditErr);
+    } finally {
+      return res.status(400).json({ error: 'Nome do profissional contém padrões inválidos.' });
+    }
+  }
+
+  // Validações adicionais
+  const nomeValido = /^[\p{L}\p{N}\s.,'-]+$/u.test(nome);
+  const telefoneValido = /^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/.test(telefone);
+  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  if (!nomeValido) {
+    return res.status(400).json({ error: 'Nome contém caracteres inválidos.' });
+  }
+
+  if (!telefoneValido) {
+    return res.status(400).json({ error: 'Telefone inválido. Ex: (21) 99999-9999' });
+  }
+
+  if (!emailValido) {
+    return res.status(400).json({ error: 'E-mail inválido.' });
   }
 
   try {
