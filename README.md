@@ -37,10 +37,10 @@ Foi desenvolvido para fins educacionais e simula a rotina de um hospital moderno
 
 https://projeto-vidaplus-production.up.railway.app/pacientes.html
 
-🔐 Credenciais de Acesso para Testes:
+🔐 Credenciais de Acesso para Testes ao login do site:
 
-Perfil	Usuário	Senha
-Admin	admin	senha123
+Usuário:admin
+Senha:senha123
 
 ## 🛠️ Tecnologias Utilizadas
 
