@@ -1,3 +1,4 @@
+// Autor: RU:4334534 ROBERTO CARVALHO
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -34,7 +35,7 @@ app.use('/leitos', leitosRoutes);
 app.use('/suprimentos', suprimentosRoutes);
 app.use('/historico_financeiro', historicoFinanceiroRoutes);
 app.use('/usuarios', usuariosRoutes); // 🔁 Evite duplicar esta linha
-app.use(authRoutes); // Login
+app.use('/auth', authRoutes); // Login
 
 // ===== ROTA PADRÃO =====
 // Rota raiz para verificação se o servidor está rodando
@@ -43,9 +44,9 @@ app.get('/', (req, res) => {
 });
 
 // ===== INICIALIZAÇÃO DO SERVIDOR =====
-const PORT = 3000; // Porta padrão do servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor rodando em: http://localhost:${PORT}`);
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
 
 

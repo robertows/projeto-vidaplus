@@ -33,14 +33,15 @@ router.post('/', verificarAutenticacao(['admin', 'atendente']), async (req, res)
     try {
       await db.query(
         'INSERT INTO auditoria (usuario, acao, data) VALUES (?, ?, NOW())',
-        ['sistema', `Tentativa de injeção SQL no nome: "${nome}"`]
+        ['sistema', `Tentativa de injeção SQL no nome do paciente: "${nome}"`]
       );
-      console.warn('🚨 Tentativa de injeção registrada na auditoria.');
+      console.warn('🚨 Tentativa de injeção SQL registrada na auditoria.');
     } catch (auditErr) {
       console.error('Erro ao registrar tentativa maliciosa na auditoria:', auditErr);
-    } finally {
-      return res.status(400).json({ error: 'Nome contém padrões inválidos.' });
     }
+
+    // ✅ Fora do try/catch
+    return res.status(400).json({ error: 'Nome do paciente contém padrões inválidos.' });
   }
 
   const nomeValido = /^[\p{L}\p{N}\s.,'-]+$/u.test(nome);
@@ -105,4 +106,3 @@ router.delete('/:id', verificarAutenticacao('admin'), async (req, res) => {
 });
 
 module.exports = router;
-

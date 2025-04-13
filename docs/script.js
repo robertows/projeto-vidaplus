@@ -1,30 +1,37 @@
+// Autor: RU:4334534 ROBERTO CARVALHO
+// ✅ Configuração inicial e funções utilitárias
+// URL base da API
+const API_URL = 'https://projeto-vidaplus-production.up.railway.app';
+console.log('🔗 Usando API URL:', API_URL);
 console.log('✅ Script carregado: utilizando decodificação manual de JWT');
 
 // Remove todos os caracteres não numéricos de um CPF
 function limparCPF(cpf) {
     return cpf.replace(/\D/g, '');
 }
+
 // Função para decodificar o token JWT manualmente
 function decodeJWT(token) {
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+        const jsonPayload = decodeURIComponent(
+            atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join('')
+        );
         return JSON.parse(jsonPayload);
     } catch (e) {
         throw new Error('Erro ao decodificar o token: ' + e.message);
     }
 }
 
-// URL base da API
-const API_URL = 'https://projeto-vidaplus-production.up.railway.app';
+// Retorna os dados do usuário logado a partir do localStorage
 function getUsuarioLogado() {
     const usuario = localStorage.getItem('usuarioLogado');
     return usuario ? JSON.parse(usuario) : null;
 }
-
+// Função para anonimizar CPFs
 async function anonimizarCPFs() {
     const usuarioLogado = getUsuarioLogado();
     console.log('Usuário logado:', usuarioLogado);
@@ -66,7 +73,7 @@ async function anonimizarCPFs() {
         alert('Erro ao anonimizar CPFs: ' + error.message);
     }
 }
-
+// Função para realizar requisições autenticadas
 async function makeAuthenticatedRequest(url, method, body = null) {
     const token = localStorage.getItem('token');
     const options = {
@@ -287,6 +294,7 @@ async function carregarPacientes() {
         !selecionarPacienteHistoricoSelect) return;
 
     try {
+         // Busca os pacientes da API
         const pacientes = await makeAuthenticatedRequest('/pacientes');
         if (!Array.isArray(pacientes) || pacientes.length === 0) {
             if (corpoTabelaPacientes) corpoTabelaPacientes.innerHTML = '<tr><td colspan="6">Nenhum paciente cadastrado.</td></tr>';
@@ -313,7 +321,7 @@ async function carregarPacientes() {
                 corpoTabelaPacientes.appendChild(tr);
             });
         }
-
+        // Preenche os selects com a lista de pacientes
         const selects = [pacienteConsultaSelect, pacienteExameSelect, pacienteTeleSelect, 
                         pacientePrescricaoSelect, selecionarPacienteSelect, selecionarPacienteHistoricoSelect];
         selects.forEach(select => {
@@ -641,7 +649,7 @@ async function excluirUsuario(id) {
         alert('Erro ao excluir usuário: ' + error.message);
     }
 }
-
+// Carrega prescrições de forma genérica, com ou sem filtro por paciente
 async function carregarPrescricoesGenerico(tabelaId, pacienteId = null) {
     const corpoTabela = document.getElementById(tabelaId);
     if (!corpoTabela) return;
@@ -689,7 +697,7 @@ async function carregarPrescricoesGenerico(tabelaId, pacienteId = null) {
 async function carregarPrescricoes() {
     await carregarPrescricoesGenerico('corpoTabelaPrescricoes');
 }
-
+// Atualiza a tabela de histórico com prescrições e exames de um paciente
 async function atualizarTabelaPrescricoes() {
     const pacienteSelect = document.getElementById('selecionarPacienteHistorico');
     const pacienteId = pacienteSelect?.value;
@@ -831,7 +839,7 @@ async function iniciarVideoChamada() {
         alert('Não foi possível iniciar a videochamada. Verifique as permissões de câmera e microfone.');
     }
 }
-
+// Encerra uma videochamada
 function encerrarVideoChamada() {
     const localVideo = document.getElementById('localVideo');
     const remoteVideo = document.getElementById('remoteVideo');
@@ -1115,8 +1123,6 @@ async function preencherProfissionaisPrescricao() {
     }
 }
 
-
-// Função para inicializar eventos
 // Função para inicializar eventos
 function inicializarEventos() {
     const btnLogin = document.getElementById('btnLogin');
@@ -1136,7 +1142,7 @@ function inicializarEventos() {
             }
 
             try {
-                const response = await fetch(`${API_URL}/login`, {
+                const response = await fetch(`${API_URL}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ usuario, senha }),
@@ -1162,7 +1168,7 @@ function inicializarEventos() {
                 console.error('Erro ao realizar login:', error);
                 alert(error.message);
             }
-        });   // ... (restante da função inicializarEventos, se houver)
+        });   
 }
 
     // Evento para o formulário de leitos
@@ -1232,56 +1238,57 @@ function inicializarEventos() {
         });
     }
 
-    const formPaciente = document.getElementById('formPaciente');
-    if (formPaciente) {
-        formPaciente.addEventListener('submit', async (e) => {
-            e.preventDefault();
-    
-            const nome = document.getElementById('nome')?.value.trim();
-            const cpf = formatarCPF(document.getElementById('cpf')?.value.trim());
-            const dataNascimento = document.getElementById('dataNascimento')?.value;
-            let telefone = document.getElementById('telefone')?.value.trim();
-            const endereco = document.getElementById('endereco')?.value.trim();
-    
-            if (!nome || !cpf || !dataNascimento || !telefone || !endereco) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-    
-            const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
-            if (padraoSQL.test(nome)) {
-                alert('Nome inválido: contém comandos não permitidos.');
-                return;
-            }
-    
-            try {
-                telefone = formatarTelefone(telefone);
-    
-                const response = await makeAuthenticatedRequest('/pacientes', 'POST', {
-                    nome,
-                    cpf,
-                    data_nascimento: dataNascimento,
-                    telefone,
-                    endereco
-                });
-    
-                if (!response.ok) {
-                    const erro = await response.json();
-                    alert(erro.error || 'Erro desconhecido ao cadastrar paciente.');
-                    return;
-                }
-    
-                await registrarAuditoria(`Paciente ${nome} adicionado`);
-                await carregarPacientes();
-                formPaciente.reset();
-                alert('Paciente cadastrado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao cadastrar paciente:', error);
-                alert('Erro ao cadastrar paciente: ' + error.message);
-            }
-        });
-    }
-    
+// Seleciona o formulário de cadastro de paciente
+const formPaciente = document.getElementById('formPaciente');
+
+if (formPaciente) {
+    formPaciente.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Evita que o formulário recarregue a página
+
+        // Captura e trata os valores dos campos
+        const nome = document.getElementById('nome')?.value.trim();
+        const cpf = formatarCPF(document.getElementById('cpf')?.value.trim());
+        const dataNascimento = document.getElementById('dataNascimento')?.value;
+        let telefone = document.getElementById('telefone')?.value.trim();
+        const endereco = document.getElementById('endereco')?.value.trim();
+
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        if (!nome || !cpf || !dataNascimento || !telefone || !endereco) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        try {
+            // Formata o telefone para o padrão (XX) XXXXX-XXXX
+            telefone = formatarTelefone(telefone);
+
+            // Envia os dados para a API
+            await makeAuthenticatedRequest('/pacientes', 'POST', {
+                nome,
+                cpf,
+                data_nascimento: dataNascimento,
+                telefone,
+                endereco
+            });
+
+            // Registra a ação na auditoria
+            await registrarAuditoria(`Paciente ${nome} adicionado`);
+
+            // Recarrega a tabela de pacientes após o cadastro
+            await carregarPacientes();
+
+            // Limpa o formulário
+            formPaciente.reset();
+
+            // Exibe mensagem de sucesso
+            alert('Paciente cadastrado com sucesso!');
+        } catch (error) {
+            // Trata erros durante o processo de cadastro
+            console.error('Erro ao cadastrar paciente:', error);
+            alert('Erro ao cadastrar paciente: ' + error.message);
+        }
+    });
+}    
     // Cadastro de profissional
     const formProfissional = document.getElementById('formProfissional');
     if (formProfissional) {
@@ -1423,6 +1430,7 @@ function inicializarEventos() {
             }
         });
     }
+     // Cadastro de prescrição Online em Telemedicina
     const formPrescricao = document.getElementById('formPrescricao');
     if (formPrescricao) {
         formPrescricao.addEventListener('submit', async (e) => {
@@ -1494,7 +1502,7 @@ function inicializarEventos() {
     
                 await registrarAuditoria(`Prescrição de ${medicamento} adicionada para consulta ID ${consultaId}`);
                 formPrescricao.reset();
-                alert('Prescrição adicionada com sucesso!');
+                alert('Prescrição Online adicionada com sucesso!');
                 await atualizarTabelaPrescricoes();
             } catch (error) {
                 console.error('Erro ao adicionar prescrição:', error);
@@ -1528,11 +1536,11 @@ function inicializarEventos() {
                     dosagem,
                     instrucoes,
                     data: dataAtual,
-                    tipo_consulta: 'Presencial' // Já estava correto
+                    tipo_consulta: 'Presencial' 
                 });
                 await registrarAuditoria(`Prescrição de ${medicamento} adicionada para paciente ID ${pacienteId}`);
                 formPrescricaoProf.reset();
-                alert('Prescrição adicionada com sucesso!');
+                alert('Prescrição Presencial adicionada com sucesso!');
                 await atualizarTabelaPrescricoes();
             } catch (error) {
                 console.error('Erro ao adicionar prescrição:', error);
@@ -1721,7 +1729,7 @@ function inicializarEventos() {
         });
     }
 }
-
+// Executa a inicialização quando a página carrega
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Página carregada:', window.location.pathname);
     verificarEstadoLogin();
@@ -1755,7 +1763,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 await carregarProfissionais();
                 await carregarEspecialidades();
                 await carregarConsultas();
-                await carregarExames(); // ✅ Exames agora carregam ao entrar na página
+                await carregarExames(); 
             }
             if (currentPage === 'telemedicina.html') {
                 await carregarPacientes();
