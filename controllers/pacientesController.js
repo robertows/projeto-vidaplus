@@ -1,3 +1,4 @@
+// Autor: RU:4334534 ROBERTO CARVALHO
 const db = require('../db');
 
 // Função para anonimizar todos os CPFs dos pacientes
