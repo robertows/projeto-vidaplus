@@ -30,21 +30,19 @@ router.post('/', verificarAutenticacao(['admin', 'atendente']), async (req, res)
   // Expressão para detectar tentativas comuns de injeção
   const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
   if (padraoSQL.test(nome)) {
-  try {
-    await db.query(
-      'INSERT INTO auditoria (usuario, acao, data) VALUES (?, ?, NOW())',
-      ['sistema', `Tentativa de injeção SQL no nome do profissional: "${nome}"`]
-    );
-    console.warn('🚨 Tentativa de injeção SQL registrada na auditoria.');
-  } catch (auditErr) {
-    console.error('Erro ao registrar tentativa maliciosa na auditoria:', auditErr);
+    try {
+      await db.query(
+        'INSERT INTO auditoria (usuario, acao, data) VALUES (?, ?, NOW())',
+        ['sistema', `Tentativa de injeção SQL no nome do paciente: "${nome}"`]
+      );
+      console.warn('🚨 Tentativa de injeção SQL registrada na auditoria.');
+    } catch (auditErr) {
+      console.error('Erro ao registrar tentativa maliciosa na auditoria:', auditErr);
+    }
+
+    // ✅ Fora do try/catch
+    return res.status(400).json({ error: 'Nome do paciente contém padrões inválidos.' });
   }
-
-  // ✅ Aqui fora do try/catch é mais seguro
-  return res.status(400).json({ error: 'Nome do profissional contém padrões inválidos.' });
- }
-
-}
 
   const nomeValido = /^[\p{L}\p{N}\s.,'-]+$/u.test(nome);
   const enderecoValido = !endereco || /^[\p{L}\p{N}\s.,'-]{0,255}$/u.test(endereco);
