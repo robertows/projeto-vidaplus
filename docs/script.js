@@ -1258,12 +1258,6 @@ if (formPaciente) {
             return;
         }
 
-        // if (padraoSQL.test(nome)) {
-        //     alert('Nome inválido: contém comandos não permitidos.');
-        //     return;
-        // }
-
-
         try {
             // Formata o telefone para o padrão (XX) XXXXX-XXXX
             telefone = formatarTelefone(telefone);
