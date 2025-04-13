@@ -1258,12 +1258,11 @@ if (formPaciente) {
             return;
         }
 
-        // Expressão regular simples para evitar comandos perigosos no campo nome
-        const padraoSQL = /('|--|;|DROP\s+TABLE|SELECT\s+\*|INSERT\s+INTO|DELETE\s+FROM|UPDATE\s+\w+)/i;
-        if (padraoSQL.test(nome)) {
-            alert('Nome inválido: contém comandos não permitidos.');
-            return;
-        }
+        // if (padraoSQL.test(nome)) {
+        //     alert('Nome inválido: contém comandos não permitidos.');
+        //     return;
+        // }
+
 
         try {
             // Formata o telefone para o padrão (XX) XXXXX-XXXX
