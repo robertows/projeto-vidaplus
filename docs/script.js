@@ -761,19 +761,24 @@ async function excluirItemHistorico(id, tipo) {
 // Função para carregar auditoria
 async function carregarAuditoria() {
     const logAuditoria = document.getElementById('logAuditoria');
-    if (!logAuditoria) return;
+    const filtroAuditoria = document.getElementById('filtroAuditoria');
+    const filtro = filtroAuditoria ? filtroAuditoria.value.trim() : '';
 
     try {
-        const auditorias = await makeAuthenticatedRequest('/auditoria');
+        const url = filtro ? `/auditoria?filtro=${encodeURIComponent(filtro)}` : '/auditoria';
+        const auditorias = await makeAuthenticatedRequest(url);
+
+        logAuditoria.innerHTML = '';
+
         if (!auditorias || auditorias.length === 0) {
             logAuditoria.innerHTML = 'Nenhum registro de auditoria encontrado.';
             return;
         }
-        logAuditoria.innerHTML = '';
+
         auditorias.forEach(auditoria => {
             const p = document.createElement('p');
             const dataFormatada = formatarDataHoraCompleta(auditoria.data);
-p.textContent = `${dataFormatada} - ${auditoria.usuario}: ${auditoria.acao}`;
+            p.textContent = `${dataFormatada} - ${auditoria.usuario}: ${auditoria.acao}`;
             logAuditoria.appendChild(p);
         });
     } catch (error) {
