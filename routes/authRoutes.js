@@ -41,6 +41,10 @@ router.post('/login', async (req, res) => {
             permissao: user.permissao
         }, process.env.JWT_SECRET, { expiresIn: '8h' });
 
+        // 📝 REGISTRA LOGIN NA AUDITORIA
+        await db.query('INSERT INTO auditoria (usuario, acao) VALUES (?, ?)', [usuario, `Login realizado por ${usuario}`]);
+      
+
         // Retorna o token e os dados básicos do usuário autenticado
         res.json({
             token,
