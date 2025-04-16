@@ -26,28 +26,26 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     const { filtro } = req.query;
 
-    // Monta a query base
     let query = 'SELECT * FROM auditoria';
     const params = [];
 
     if (filtro) {
-        // Adiciona cláusula WHERE para procurar em usuário, ação ou data
-        query += ' WHERE usuario LIKE ? OR acao LIKE ? OR DATE(data) = ?';
         const likeFiltro = `%${filtro}%`;
-        params.push(likeFiltro, likeFiltro, filtro);
+        query += ' WHERE usuario LIKE ? OR acao LIKE ? OR data LIKE ?';
+        params.push(likeFiltro, likeFiltro, likeFiltro);
     }
 
-    query += ' ORDER BY data DESC'; // Ordena do mais recente ao mais antigo
+    query += ' ORDER BY data DESC';
 
     try {
-        // Executa a consulta com os filtros aplicados
         const [rows] = await db.query(query, params);
         res.json(rows);
     } catch (err) {
-        console.error('Erro ao buscar auditorias:', err);
+        console.error('Erro ao buscar auditorias:', err.message, err.stack);
         res.status(500).json({ error: 'Erro ao buscar auditorias.' });
     }
 });
+
 
 module.exports = router; // Exporta o router para ser usado no app principal
 
