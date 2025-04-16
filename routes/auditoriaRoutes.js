@@ -22,45 +22,33 @@ router.post('/', async (req, res) => {
     }
 });
 
-// ✅ ROTA GET – Buscar auditorias com filtros opcionais
+// ✅ ROTA GET – Buscar auditorias com filtro unificado (usuario, ação ou data)
 router.get('/', async (req, res) => {
-    // Captura os parâmetros de filtro da URL (ex: ?usuario=admin&data=2025-04-15)
-    const { usuario, acao, data } = req.query;
+    const { filtro } = req.query;
 
-    // Monta a base da consulta SQL (o WHERE 1=1 permite adicionar filtros depois)
-    let query = 'SELECT * FROM auditoria WHERE 1=1';
-    const params = []; // Armazena os valores para a consulta
+    // Monta a query base
+    let query = 'SELECT * FROM auditoria';
+    const params = [];
 
-    // Adiciona filtro por usuário, se fornecido
-    if (usuario) {
-        query += ' AND usuario LIKE ?';
-        params.push(`%${usuario}%`);
+    if (filtro) {
+        // Adiciona cláusula WHERE para procurar em usuário, ação ou data
+        query += ' WHERE usuario LIKE ? OR acao LIKE ? OR DATE(data) = ?';
+        const likeFiltro = `%${filtro}%`;
+        params.push(likeFiltro, likeFiltro, filtro);
     }
 
-    // Adiciona filtro por ação, se fornecido
-    if (acao) {
-        query += ' AND acao LIKE ?';
-        params.push(`%${acao}%`);
-    }
-
-    // Adiciona filtro por data exata (formato esperado: YYYY-MM-DD)
-    if (data) {
-        query += ' AND DATE(data) = ?';
-        params.push(data);
-    }
-
-    // Ordena os registros da auditoria da mais recente para a mais antiga
-    query += ' ORDER BY data DESC';
+    query += ' ORDER BY data DESC'; // Ordena do mais recente ao mais antigo
 
     try {
-        // Executa a consulta no banco com os filtros aplicados
+        // Executa a consulta com os filtros aplicados
         const [rows] = await db.query(query, params);
-        res.json(rows); // Retorna os registros encontrados
+        res.json(rows);
     } catch (err) {
         console.error('Erro ao buscar auditorias:', err);
         res.status(500).json({ error: 'Erro ao buscar auditorias.' });
     }
 });
+
 
 module.exports = router; // Exporta o router para ser usado no app principal
 
