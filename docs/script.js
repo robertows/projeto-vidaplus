@@ -782,14 +782,19 @@ p.textContent = `${dataFormatada} - ${auditoria.usuario}: ${auditoria.acao}`;
     }
 }
 
-// Função para configurar filtro de auditoria com debounce
+// ✅ Função para configurar o filtro de auditoria com debounce (espera antes de executar)
+// Isso evita chamadas excessivas ao digitar no campo de filtro
 function configurarFiltroAuditoria() {
     const filtroAuditoria = document.getElementById('filtroAuditoria');
+
+    // Verifica se o campo de filtro existe na página
     if (filtroAuditoria) {
         let timeout;
+
+        // Adiciona evento de digitação
         filtroAuditoria.addEventListener('input', () => {
-            clearTimeout(timeout);
-            timeout = setTimeout(carregarAuditoria, 500);
+            clearTimeout(timeout); // Limpa a espera anterior
+            timeout = setTimeout(carregarAuditoria, 500); // Aguarda 500ms e chama a função
         });
     }
 }
